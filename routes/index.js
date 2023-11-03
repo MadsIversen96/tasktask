@@ -65,25 +65,11 @@ else {
 router.post('/dishes', async (req, res) => {
   const { dishName, country } = req.body; // Assuming dishName and country are part of the POST request
 
-  let existingDishes = await dishesCollection.get("dishes");
-
-  if (existingDishes == null) {
-    // If the "dishes" object doesn't exist, create it with the first dish
-    await dishesCollection.set("dishes", {
-      [dishName]: {
-        name: dishName,
-        country: country
-      }
-    });
-  } else {
-    // If the "dishes" object exists, add the new dish to it
-    existingDishes.props[dishName] = {
-      name: dishName,
-      country: country
-    };
-
-    await dishesCollection.set("dishes", existingDishes.props);
-  }
+  // Use the dish name as the key for the dish in the collection
+  await dishesCollection.set(dishName, {
+    name: dishName,
+    country: country
+  });
 
   res.json({
     status: "success",
