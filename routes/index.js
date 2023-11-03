@@ -63,9 +63,8 @@ else {
 });
 
 router.post('/dishes', async (req, res) => {
-  const { dishName, country } = req.body; // Assuming dishName and country are part of the POST request
+  const { dishName, country } = req.body; 
 
-  // Use the dish name as the key for the dish in the collection
   await dishesCollection.set(dishName, {
     name: dishName,
     country: country
