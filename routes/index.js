@@ -57,24 +57,39 @@ router.get('/dishes', async(req, res) => {
 else {
     res.json({
       status: "success",
-      dishes: dishes.props
+      dishes: dishes
     });
   }
 });
 
 router.post('/dishes', async (req, res) => {
-  const { dishName, country } = req.body; 
+  const { dishName, country } = req.body;
 
-  await dishesCollection.set(dishName, {
+  // Fetch the current dishes collection
+  let currentDishes = await dishesCollection.get("dishes");
+
+  if (currentDishes === null) {
+    // If the collection doesn't exist, initialize it as an empty array
+    currentDishes = { props: [] };
+  } else if (!Array.isArray(currentDishes.props)) {
+    // If it's not an array, wrap it in an array
+    currentDishes.props = [currentDishes.props];
+  }
+
+  // Add the new dish to the collection
+  currentDishes.props.push({
     name: dishName,
-    country: country
+    country: country,
   });
+
+  // Save the updated collection back to DynamoDB
+  await dishesCollection.set("dishes", currentDishes);
 
   res.json({
     status: "success",
     dish: {
       name: dishName,
-      country: country
+      country: country,
     }
   });
 });
