@@ -3,7 +3,7 @@ var router = express.Router();
 const AWS = require("aws-sdk");
 const s3 = new AWS.S3()
 const CyclicDb = require("@cyclic.sh/dynamodb")
-const db = CyclicDb("vast-loincloth-flyCyclicDB")
+const db = CyclicDb("doubtful-toad-lapelCyclicDB")
 let dishesCollection = db.collection('dishes')
 
 /* GET home page. */
